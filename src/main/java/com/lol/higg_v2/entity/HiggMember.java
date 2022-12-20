@@ -26,6 +26,9 @@ public class HiggMember {
     @Column
     private String pw;
 
+    @Column
+    private String role;
+
     public HiggLoginInfo toLoginInfo() {
         return HiggLoginInfo.builder().uid(this.uid).build();
     }

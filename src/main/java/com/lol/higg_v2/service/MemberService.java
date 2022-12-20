@@ -15,14 +15,14 @@ public class MemberService {
     @Autowired
     HiggMemberRepository higgMemberRepository;
 
-    public HiggMember insetMember(HiggMember higgMember) {
+    public HiggMember insertMember(HiggMember higgMember) {
         //회원가입
         log.info("회원가입 서비스");
         return higgMemberRepository.save(higgMember);
     }
 
-    public HiggMember selectById(String uid) {
-        return higgMemberRepository.findByUid(uid);
+    public HiggMember selectByUid(String uid) {
+        return higgMemberRepository.findByUid(uid).get();
     }
 
 

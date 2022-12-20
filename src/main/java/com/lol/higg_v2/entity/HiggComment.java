@@ -29,7 +29,7 @@ public class HiggComment {
     @Column
     private String reply;
 
-    @Column(insertable = false)
+    @Column(insertable = false, updatable = false)
     private LocalDate replydate;
 
     @Column(insertable = false)

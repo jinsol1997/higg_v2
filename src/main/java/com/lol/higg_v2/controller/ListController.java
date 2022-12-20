@@ -70,6 +70,7 @@ public class ListController {
             } else if(list.get(i).getQueueType().equals("RANKED_FLEX_SR")){
                 model.addAttribute("teamRankEntryDTO", list.get(i));
             }
+            log.info(list.get(i));
         }
 
         model.addAttribute("summonerDTO", summonerDTO);

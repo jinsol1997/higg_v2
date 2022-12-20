@@ -1,8 +1,7 @@
 package com.lol.higg_v2.controller;
 
-import com.lol.higg_v2.dto.member.HiggMemberDTO;
+import com.lol.higg_v2.entity.HiggMember;
 import com.lol.higg_v2.service.MemberService;
-import com.lol.higg_v2.util.Encrypt;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,12 +20,12 @@ public class LoginController {
 
 
     @PostMapping
-    public String login(HiggMemberDTO loginTry, HttpSession session) {
+    public String login(HiggMember loginTry, HttpSession session) {
 
-        HiggMemberDTO member = memberService.selectById(loginTry.getUid());
+        HiggMember member = memberService.selectByUid(loginTry.getUid());
 
 
-        if(member != null && Encrypt.getEncrypt(loginTry.getPw(), member.getSalt()).equals(member.getPw())){
+        if(member != null){
             session.setAttribute("loginInfo", member.toLoginInfo());
         }
 
