@@ -18,15 +18,27 @@ public class CommentService {
     HiggCommentRepository higgCommentRepository;
 
     public List<HiggComment> getList(String puuid) {
+        log.info("List Service 진입@@@");
+        log.info(higgCommentRepository.findByPuuid(puuid));
         return higgCommentRepository.findByPuuid(puuid);
     }
 
     public HiggComment insertComment(HiggComment higgComment) {
         log.info("서비스 ");
-        log.info(higgComment.getUid());
+        log.info(higgComment.getWriter());
         log.info(higgComment.getReply());
         log.info(higgComment.getPuuid());
         higgComment.setReplydate(LocalDate.now());
+        log.info(higgComment.getReplydate());
+        return higgCommentRepository.save(higgComment);
+    }
+
+    public long deleteComment(Integer idx) {
+        return higgCommentRepository.deleteByIdx(idx);
+    }
+
+    public HiggComment update(HiggComment higgComment){
+        higgComment.setUpdatedate(LocalDate.now());
         return higgCommentRepository.save(higgComment);
     }
 }

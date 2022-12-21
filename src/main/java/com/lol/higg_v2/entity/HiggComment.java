@@ -20,8 +20,12 @@ public class HiggComment {
     @Column
     private Integer idx;
 
-    @Column
-    private String uid;
+//    @Column
+//    private String uid;
+
+    @ManyToOne
+    @JoinColumn(name = "writer")
+    private HiggMember writer;
 
     @Column
     private String puuid;
@@ -29,9 +33,9 @@ public class HiggComment {
     @Column
     private String reply;
 
-    @Column(insertable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDate replydate;
 
-    @Column(insertable = false)
+    @Column
     private LocalDate updatedate;
 }

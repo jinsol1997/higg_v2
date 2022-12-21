@@ -45,7 +45,8 @@ public class CustomUserDetailService implements UserDetailsService {
         CustomMember user = new CustomMember(
                 higgMember.getUid(),
                 higgMember.getPw(),
-                authorities
+                authorities,
+                higgMember
         );
 
         return user;

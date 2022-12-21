@@ -20,6 +20,7 @@ public class CustomSecurityConfig {
 
         http.authorizeHttpRequests()
                 .antMatchers("/higg/**").hasRole("USER")
+                .antMatchers("/higg/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 

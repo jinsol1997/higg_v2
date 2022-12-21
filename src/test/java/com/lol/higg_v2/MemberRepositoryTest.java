@@ -22,10 +22,16 @@ public class MemberRepositoryTest {
     @Test
     public void memberSaveTest(){
 
-        HiggMember higgMember = HiggMember.builder().uid("sad").pw(encoder.encode("1111")).role("USER").build();
+        HiggMember higgMember = HiggMember.builder().uid("user").pw(encoder.encode("1111")).role("USER").build();
 
         log.info(higgMember);
 
         log.info(higgMemberRepository.save(higgMember));
+
+//        HiggMember higgMember = HiggMember.builder().uid("admin").pw(encoder.encode("1111")).role("ADMIN").build();
+//
+//        log.info(higgMember);
+//
+//        log.info(higgMemberRepository.save(higgMember));
     }
 }

@@ -75,6 +75,9 @@ public class ListController {
 
         model.addAttribute("summonerDTO", summonerDTO);
         model.addAttribute("matchDTO", matchDTO);
+
+
+
         //model.addAttribute("comment", commentService.getList(summonerDTO.getPuuid()));
     }
 }

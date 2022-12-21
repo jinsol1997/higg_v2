@@ -21,9 +21,9 @@
             integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
-<!--            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
-<!--            crossorigin="anonymous"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
+    <!--            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
+    <!--            crossorigin="anonymous"></script>-->
 
 </head>
 <body class="bg-light">
@@ -305,17 +305,22 @@
         }
     </style>
 
+
+    <div th:value="${#authentication.principal}" th:text="${#authentication.principal}"></div>
+    <div th:value="${#authentication.principal.username}" th:text="${#authentication.principal.username}"></div>
+
     <div class="card my-4 " id="text">
         <h5 class="card-header">댓글</h5>
         <div class="card-body">
             <div class="form-group">
-                <input type="hidden" name="searchNum" th:value="${summonerDTO.puuid}"/>
-                <input type="hidden" name="uid" th:value="${#authentication.principal.username}"/>
-                <textarea name="message" class="form-control" rows="4" cols="50" id="message" placeholder="댓글을 입력하세요"></textarea>
+                <input type="hidden" name="searchNum" id="puuid" th:value="${summonerDTO.puuid}"/>
+                <input type="hidden" name="uid" id="uid" th:value="${#authentication.principal.username}"/>
+                <textarea name="message" class="form-control" rows="4" cols="50" id="message"
+                          placeholder="댓글을 입력하세요"></textarea>
             </div>
-            <input type="button" class="btn btn-primary" onclick="postsubmit()" value="Submit">
+            <input type="button" class="btn btn-primary" onclick="postComment()" value="Submit">
 
-            <input type="button" onclick="getSearchList()" class="btn btn-primary" value="새로고침">
+            <input type="button" onclick="getCommentList()" class="btn btn-primary" value="새로고침">
 
             <table class="table table-striped table-sm" id="replylist">
             </table>
@@ -326,56 +331,99 @@
 <script>
 
     $().ready(() => {
-        getSearchList()
-
+         getCommentList()
     })
 
-
-    // $(window).load(getSearchList())
-
     /* ajax,axios */
-    function getSearchList() {
+    function getCommentList() {
         $.ajax({
             type: 'GET',
-            url: '/comment/ajaxselect/' + [[${summonerDTO.puuid}]],
+            url: '/comment/' + $('#puuid').val(),
             success: function (data) {
                 console.log(data)
-                $("#replylist").html('');
+                $('#replylist').html('')
                 $.each(data, function (index, item) {
 
-                    let html = '';
-                    html += '<tr id="list_tr" ">';
-                    html += '<td>' + item.uid + ':</td>';
-                    html += '<td>' + item.reply + '</td>';
-                    html += '</tr>';
+                    let html = ''
+                    // html += '<tr id="list_tr">';
+                    html += '<td>' + item.writer.uid + ':</td>'
+                    html += '<td>' + item.reply + '</td>'
+                    html += '<td><small>작성일:' + item.replydate + '</small></td>'
+                    html += '<td><small>수정일:' + item.updatedate + '</small></td>'
 
-                    /*$("#replylist").prepend(html);*/
-                    $("#replylist").append(html);
-                });
+                    if (item.uid == $('#uid').val()) {
+                        html += '<td><input class="btn btn-sm btn-warning" type="button" value="수정" onclick="updateComment(' + item.idx + ')"></td>'
+                        html += '<td><input class="btn btn-sm btn-danger" type="button" value="삭제" onclick="deleteComment(' + item.idx + ')"></td>'
+                    }
+
+                    // html += '</tr>';
+
+                    const newTr = $('<tr></tr>').attr('reply-idx', item.idx).attr('reply-uid', item.writer.uid).html(html)
+
+                    $("#replylist").append(newTr);
+                })
 
             },
             error: function () {
                 alert('error');
             }
-        });
-    };
+        })
+    }
 
-    function postsubmit() {
-        if($('#message').val() == ''){
+    function postComment() {
+        if ($('#message').val() == '') {
             alert('댓글 공백 불가')
             return;
         }
 
-        axios.post('/comment/ajaxselect', {
-            puuid: [[${summonerDTO.puuid}]],
-            uid: [[${#authentication.principal.username}]],
-            reply: document.querySelector('#message').value
+        const payload = {
+            writer: $('#uid').val(),
+            reply: $('#message').val(),
+            puuid: $('#puuid').val()
+        }
+
+        $.ajax({
+            type: 'post',
+            url: '/comment/post',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: () => {
+                $('#message').val('')
+                getCommentList()
+            }
         })
-            /*댓글 입력 후 새로고침 & 입력 초기화*/
-            .finally(getSearchList(),
-                document.querySelector('#message').value = ""
-            )
-        getSearchList()
+    }
+
+    function deleteComment(idx) {
+
+        console.log(idx)
+
+        if (confirm('정말 삭제합니까?')) {
+            axios.delete('/comment/delete/' + idx)
+                .then(getCommentList)
+        }
+
+    }
+
+    function updateComment(idx) {
+
+        console.log(idx)
+        console.log($('#puuid').val())
+
+        const payload = {
+            uid: 'sad',
+            puuid: $('#puuid').val(),
+            reply: '수정 테스트'
+        }
+
+        $.ajax({
+            type: 'put',
+            url: '/comment/put/' + idx,
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: getCommentList
+        })
+
     }
 
 </script>
