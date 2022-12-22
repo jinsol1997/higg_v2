@@ -38,6 +38,12 @@ CREATE TABLE `higg_comment` (
 
 
 
-# 
+# DB ERD
+
+![higg_v2_erd](https://user-images.githubusercontent.com/113006954/209058525-eb59b1a7-ccf0-4371-8333-e8c83cba59dc.PNG)
+
+
+
+# higg_v2 
 
 ![higg_v2](https://user-images.githubusercontent.com/113006954/209055977-c1765f30-b767-48c3-a56c-cbd0d5f249fa.PNG)
