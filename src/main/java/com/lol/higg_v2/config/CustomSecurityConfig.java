@@ -19,8 +19,9 @@ public class CustomSecurityConfig {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/higg/**").hasRole("USER")
-                .antMatchers("/higg/**").hasRole("ADMIN")
+                .antMatchers("/higg/**").hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/higg/**").hasRole("USER")
+//                .antMatchers("/higg/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
 

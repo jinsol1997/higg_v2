@@ -309,10 +309,16 @@
     <div th:value="${#authentication.principal}" th:text="${#authentication.principal}"></div>
     <div th:value="${#authentication.principal.username}" th:text="${#authentication.principal.username}"></div>
 
+
+    <div th:value="${#authentication.principal.higgMember.role}" th:text="${#authentication.principal.higgMember.role}"></div>
+
+    <input type="hidden" id="role" th:value="${#authentication.principal.higgMember.role}">
+
     <div class="card my-4 " id="text">
         <h5 class="card-header">댓글</h5>
         <div class="card-body">
             <div class="form-group">
+                <input type="hidden" name="idx" id="idx" th:value="${midx}">
                 <input type="hidden" name="searchNum" id="puuid" th:value="${summonerDTO.puuid}"/>
                 <input type="hidden" name="uid" id="uid" th:value="${#authentication.principal.username}"/>
                 <textarea name="message" class="form-control" rows="4" cols="50" id="message"
@@ -326,12 +332,53 @@
             </table>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="replyEditModal" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">댓글 수정</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">작성자</label>
+                        <input type="text" class="form-control" id="ereplyerName"
+                               th:value="${#authentication.principal.username}" readonly>
+                        <input type="hidden" id="hidden">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">내용</label>
+                        <textarea class="form-control" rows="3" id="ereply"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" id="btn_edit" class="btn btn-primary">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </main>
 
 <script>
 
+    let editModal;
+
     $().ready(() => {
-         getCommentList()
+        getCommentList()
+        editModal = new bootstrap.Modal('#replyEditModal')
+
+        // 댓글 등록 버튼 이벤트 등록
+        // $("#btn_reply").on('click', insertReply)
+        // 수정 submit 버튼 이벤트
+        $('#btn_edit').click(updateComment)
+
     })
 
     /* ajax,axios */
@@ -348,11 +395,11 @@
                     // html += '<tr id="list_tr">';
                     html += '<td>' + item.writer.uid + ':</td>'
                     html += '<td>' + item.reply + '</td>'
-                    html += '<td><small>작성일:' + item.replydate + '</small></td>'
-                    html += '<td><small>수정일:' + item.updatedate + '</small></td>'
+                    html += '<td><small>작성일<br>' + item.replydate + '</small></td>'
+                    html += '<td><small>수정일<br>' + item.updatedate + '</small></td>'
 
-                    if (item.uid == $('#uid').val()) {
-                        html += '<td><input class="btn btn-sm btn-warning" type="button" value="수정" onclick="updateComment(' + item.idx + ')"></td>'
+                    if (item.writer.uid == $('#uid').val() || $('#role').val() == 'ADMIN') {
+                        html += '<td><input class="btn btn-sm btn-warning" type="button" value="수정" onclick="showEditModal(' + item.idx + ')"></td>'
                         html += '<td><input class="btn btn-sm btn-danger" type="button" value="삭제" onclick="deleteComment(' + item.idx + ')"></td>'
                     }
 
@@ -371,16 +418,24 @@
     }
 
     function postComment() {
+        console.log("postComment")
+        console.log($('#message').val())
+        console.log($('#uid').val())
+        console.log($('#puuid').val())
+        console.log($('#idx').val())
+
         if ($('#message').val() == '') {
             alert('댓글 공백 불가')
             return;
         }
 
         const payload = {
-            writer: $('#uid').val(),
+            writer: $('#idx').val(),
             reply: $('#message').val(),
             puuid: $('#puuid').val()
         }
+
+        console.log(payload)
 
         $.ajax({
             type: 'post',
@@ -405,24 +460,37 @@
 
     }
 
-    function updateComment(idx) {
+    function updateComment() {
 
-        console.log(idx)
+        console.log($('#hidden').val())
         console.log($('#puuid').val())
 
         const payload = {
-            uid: 'sad',
-            puuid: $('#puuid').val(),
-            reply: '수정 테스트'
+            writer: $('#idx').val(),
+            reply: $('#ereply').val(),
+            puuid: $('#puuid').val()
         }
 
         $.ajax({
             type: 'put',
-            url: '/comment/put/' + idx,
+            url: '/comment/put/' + $('#hidden').val(),
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: getCommentList
+            success: ()=>{
+                editModal.hide()
+                $('#ereply').val('')
+                getCommentList()
+            }
         })
+
+        getCommentList()
+
+    }
+
+    function showEditModal(idx){
+
+        editModal.show()
+        $('#hidden').val(idx)
 
     }
 
@@ -432,6 +500,7 @@
 <script src="js/bootstrap/bootstrap.min.js"></script>
 <script src="js/assets/js/vendor/holder.min.js"></script>
 <script src="js/bootstrap/offcanvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
 </body>
 </html>

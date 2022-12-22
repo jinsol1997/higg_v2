@@ -1,5 +1,7 @@
 package com.lol.higg_v2.dto.member;
 
+import com.lol.higg_v2.entity.HiggComment;
+import com.lol.higg_v2.entity.HiggMember;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class HiggCommentDTO {
-    //댓글 DTO
 
-    //댓글 작성한 아이디
-    private String uid;
-    //댓글을 작성한 게시물 롤닉네임
-    private String puuid;
-    //게시물에 작성한 댓글
+    private Integer writer;
+
     private String reply;
+
+    private String puuid;
+
+    public HiggComment toCommentEntity(){
+        return HiggComment.builder().writer(HiggMember.builder().idx(writer).build()).reply(reply).puuid(puuid).build();
+    }
 }

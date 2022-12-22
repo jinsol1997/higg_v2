@@ -6,11 +6,13 @@ import com.google.gson.reflect.TypeToken;
 import com.lol.higg_v2.dto.lol.LeagueEntryDTO;
 import com.lol.higg_v2.dto.lol.MatchDTO;
 import com.lol.higg_v2.dto.lol.SummonerDTO;
+import com.lol.higg_v2.security.CustomMember;
 import com.lol.higg_v2.service.CommentService;
 import com.lol.higg_v2.util.ApiKey;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,7 @@ public class ListController {
     CommentService commentService;
 
     @GetMapping()
-    public void listForm(Model model, HttpSession session) {
+    public void listForm(Model model, HttpSession session, @AuthenticationPrincipal CustomMember customMember) {
 
         SummonerDTO summonerDTO = (SummonerDTO) session.getAttribute("summonerDTO");
 
@@ -75,6 +77,7 @@ public class ListController {
 
         model.addAttribute("summonerDTO", summonerDTO);
         model.addAttribute("matchDTO", matchDTO);
+        model.addAttribute("midx", customMember.getHiggMember().getIdx());
 
 
 

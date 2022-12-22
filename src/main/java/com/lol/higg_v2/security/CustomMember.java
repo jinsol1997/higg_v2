@@ -2,12 +2,14 @@ package com.lol.higg_v2.security;
 
 import com.lol.higg_v2.entity.HiggMember;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
 @Getter
+@ToString
 public class CustomMember extends User {
 
     private HiggMember higgMember;

@@ -1,5 +1,6 @@
 package com.lol.higg_v2.controller;
 
+import com.lol.higg_v2.dto.member.HiggCommentDTO;
 import com.lol.higg_v2.entity.HiggComment;
 import com.lol.higg_v2.service.CommentService;
 import lombok.extern.log4j.Log4j2;
@@ -28,8 +29,8 @@ public class CommentController {
     }
 
     @PostMapping("/post")
-    public void postin(@RequestBody HiggComment higgComment) {
-        commentService.insertComment(higgComment);
+    public void postin(@RequestBody HiggCommentDTO higgCommentDTO) {
+        commentService.insertComment(higgCommentDTO.toCommentEntity());
     }
 
     @DeleteMapping("/delete/{idx}")
@@ -38,9 +39,11 @@ public class CommentController {
     }
 
     @PutMapping("/put/{idx}")
-    public void updateComment(@PathVariable("idx") Integer idx, @RequestBody HiggComment higgComment){
+    public void updateComment(@PathVariable("idx") Integer idx, @RequestBody HiggCommentDTO higgCommentDTO){
+
+        HiggComment higgComment = higgCommentDTO.toCommentEntity();
         higgComment.setIdx(idx);
-        log.info(higgComment + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
         commentService.update(higgComment);
     }
 
