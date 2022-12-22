@@ -12,3 +12,4 @@
 3. thymeleaf를 이용한 view 페이지 // 시간이 부족하여 list 페이지만 구현
 5. spring boot security를 이용한 회원가입&&로그인 처리, 로그인 한 유저의 role이 ADMIN일 시 모든 댓글 수정, 삭제 가능 / 일반 유저일 시 본인의 댓글만 가능하도록 구현
 
+![higg_v2](https://user-images.githubusercontent.com/113006954/209055977-c1765f30-b767-48c3-a56c-cbd0d5f249fa.PNG)
