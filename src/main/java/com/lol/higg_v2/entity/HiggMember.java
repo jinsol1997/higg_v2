@@ -1,6 +1,5 @@
 package com.lol.higg_v2.entity;
 
-import com.lol.higg_v2.dto.member.HiggLoginInfo;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,9 +27,5 @@ public class HiggMember {
 
     @Column
     private String role;
-
-    public HiggLoginInfo toLoginInfo() {
-        return HiggLoginInfo.builder().uid(this.uid).build();
-    }
 
 }

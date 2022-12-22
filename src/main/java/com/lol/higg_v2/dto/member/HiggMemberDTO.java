@@ -1,26 +1,24 @@
 package com.lol.higg_v2.dto.member;
 
+import com.lol.higg_v2.entity.HiggMember;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 @Builder
 public class HiggMemberDTO {
-    //사용자 DTO
 
-    //아이디
     private String uid;
-    //비밀번호
+
     private String pw;
 
-    private String salt;
-
-    public HiggLoginInfo toLoginInfo() {
-        return HiggLoginInfo.builder().uid(this.uid).build();
+    public HiggMember toHiggMemberEntity(){
+        return HiggMember.builder().uid(uid).pw(pw).role("USER").build();
     }
-
 }

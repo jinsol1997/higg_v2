@@ -1,6 +1,5 @@
 package com.lol.higg_v2.service;
 
-import com.lol.higg_v2.dto.member.HiggMemberDTO;
 import com.lol.higg_v2.entity.HiggMember;
 import com.lol.higg_v2.repository.HiggMemberRepository;
 import lombok.extern.log4j.Log4j2;
