@@ -1,6 +1,7 @@
 # higg_v2 소개 
 
 소환사명으로 lol 유저 전적 검색, 해당 소환사에게 댓글을 남길 수 있는 higg_v2
+![higg_v2](https://user-images.githubusercontent.com/113006954/209055977-c1765f30-b767-48c3-a56c-cbd0d5f249fa.PNG)
 
 
 
@@ -44,6 +45,4 @@ CREATE TABLE `higg_comment` (
 
 
 
-# higg_v2 
 
-![higg_v2](https://user-images.githubusercontent.com/113006954/209055977-c1765f30-b767-48c3-a56c-cbd0d5f249fa.PNG)
